@@ -1,0 +1,84 @@
+import groovy.json.JsonSlurper
+
+private static Map acquireMysqlCredentials(databaseInstanceName) {
+    println databaseInstanceName
+    execute(['cf', 'create-service-key', databaseInstanceName, 'flyway-migration-key'])
+
+    println 'Acquiring cf service key'
+
+
+    def serviceKeyJson = execute(['cf', 'service-key', databaseInstanceName, 'flyway-migration-key'])
+            .replaceFirst(/(?s)^[^{]*/, '')
+
+    println serviceKeyJson
+
+    def map = new JsonSlurper().parseText(serviceKeyJson) as Map
+
+
+
+    println 'returning Map'
+    println map
+
+    return map
+}
+
+ext.setupProdFlywayExtension = { extension, databaseInstanceName ->
+    def mysqlCredentials = acquireMysqlCredentials(databaseInstanceName)
+
+    if (mysqlCredentials != null) {
+
+        def databaseName = mysqlCredentials["name"]
+
+        def user = mysqlCredentials["username"]
+        def password = mysqlCredentials["password"]
+        def url = "jdbc:mysql://127.0.0.1:63306/" + databaseName
+
+        extension.user = user
+        extension.password = password
+        extension.url = url
+    }
+
+    return extension
+}
+
+
+ext.getMysqlHost = { databaseInstanceName ->
+    def mysqlCredentials = acquireMysqlCredentials(databaseInstanceName)
+
+    println mysqlCredentials
+
+    return mysqlCredentials["hostname"]
+}
+
+private static String execute(List args) {
+
+for (String argument: args){
+    println argument
+}
+
+    try{
+
+        def process = args.execute()
+
+        println process
+
+
+        def output = process.text
+        process.waitFor()
+
+        println 'Executed in Regular block'
+
+        println output;
+
+        return output
+    }catch( Exception e){
+        println 'Failed in Ecepion block'
+        println e.toString()
+        throw new Exception ("Error while executing commades!!")
+    }
+
+
+
+
+
+}
