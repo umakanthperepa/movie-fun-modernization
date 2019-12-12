@@ -1,10 +1,9 @@
 package org.superbiz.moviefun;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SmokeTest {
 
@@ -14,20 +13,20 @@ public class SmokeTest {
 
         String homePage = restTemplate.getForObject(url("/"), String.class);
 
-        assertThat(homePage, containsString("Please select one of the following links:"));
+        MatcherAssert.assertThat(homePage, CoreMatchers.containsString("Please select one of the following links:"));
 
         String setupPage = restTemplate.getForObject(url("/setup"), String.class);
 
-        assertThat(setupPage, containsString("Wedding Crashers"));
-        assertThat(setupPage, containsString("Starsky & Hutch"));
-        assertThat(setupPage, containsString("Shanghai Knights"));
-        assertThat(setupPage, containsString("I-Spy"));
-        assertThat(setupPage, containsString("The Royal Tenenbaums"));
+        MatcherAssert.assertThat(setupPage, CoreMatchers.containsString("Wedding Crashers"));
+        MatcherAssert.assertThat(setupPage, CoreMatchers.containsString("Starsky & Hutch"));
+        MatcherAssert.assertThat(setupPage, CoreMatchers.containsString("Shanghai Knights"));
+        MatcherAssert.assertThat(setupPage, CoreMatchers.containsString("I-Spy"));
+        MatcherAssert.assertThat(setupPage, CoreMatchers.containsString("The Royal Tenenbaums"));
 
         String movieFunPage = restTemplate.getForObject(url("/moviefun"), String.class);
 
-        assertThat(movieFunPage, containsString("Wedding Crashers"));
-        assertThat(movieFunPage, containsString("David Dobkin"));
+        MatcherAssert.assertThat(movieFunPage, CoreMatchers.containsString("Wedding Crashers"));
+        MatcherAssert.assertThat(movieFunPage, CoreMatchers.containsString("David Dobkin"));
     }
 
     private String url(String path) {

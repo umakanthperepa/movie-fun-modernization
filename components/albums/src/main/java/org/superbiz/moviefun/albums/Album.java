@@ -105,4 +105,6 @@ public class Album implements Serializable {
         if (one != null ? !one.equals(other) : other != null) return false;
         return true;
     }
+
+
 }

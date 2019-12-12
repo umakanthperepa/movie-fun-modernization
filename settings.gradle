@@ -1,6 +1,21 @@
 rootProject.name = "moviefun"
 
-include "applications:movie-fun-app"
+// core components
 
+include "components:blobstore"
+
+//Album components
 include "components:albums"
+
+//Cross dependency one.
+include "components:movie-fun-api"
+
+//Movie components
 include "components:movies"
+
+include "components:cf-support"
+
+//Applications
+include "applications:movie-fun-app"
+include "applications:movie-service"
+include "applications:album-service"
